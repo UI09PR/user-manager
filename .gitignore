@@ -1,0 +1,47 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+.fleet
+.idea
+.vscode
+Thumbs.db
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Docker
+docker-compose.override.yml
+docker-compose.override.yaml
+*.pid
+
+# Editor-specific
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+
+# OS-specific
+*.iml
+*.class
+*.pyc
+*__pycache__/

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["ESNext", "DOM"],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "types": ["@nuxt/types", "node"],
+    "jsx": "preserve",
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "nuxt.config.ts", "server/**/*", "src/error.vue"],
+  "exclude": ["node_modules", ".nuxt", "dist", "tailwind.config.js", "postcss.config.js", "server/server.js"]
+}
