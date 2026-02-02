@@ -9,25 +9,29 @@
         ]"
       />
 
-      <div class="flex justify-between items-start md:items-center gap-2 w-full flex-col md:flex-row">
-        <label class="text-lg font-semibold flex justify-between items-center gap-2 w-[100%] md:w-[25%]">
-          Лимит:
+      <div
+        class="flex justify-between items-start md:items-center gap-2 w-full flex-col md:flex-row"
+      >
+        <label
+          class="text-lg font-semibold flex justify-between gap-2 items-center"
+        >
           <input
             :value="userStore.limit"
             @focus="keyboardStore.focusTarget = true"
             @blur="keyboardStore.focusTarget = false"
-            @change="(e) => {
-              const target = e?.target as HTMLInputElement;
-              handleChangeLimit(Number(target?.value) ?? 10)
-              target.blur();
-              }"
+            @change="
+              (e) => {
+                const target = e?.target as HTMLInputElement;
+                handleChangeLimit(Number(target?.value) ?? 10);
+                target.blur();
+              }
+            "
             type="nubmer"
-            class="w-[30%] h-16 rounded-lg p-2 text-[#000] text-center"
+            class="rounded-lg p-2 text-[#000] text-center w-14"
           />
           <component
             :is="AsyncButton"
             :icon="showFilters ? 'filter-circle-xmark' : 'filter'"
-            class="ml-1"
             @click="
               () => {
                 showFilters = !showFilters;
@@ -36,12 +40,9 @@
             "
             :variant="showFilters ? 'danger' : 'dark-secondary'"
             :loading="userStore.firstLoad"
-          >
-            Фильтры
-          </component>
+          />
         </label>
         <div class="flex-center gap-3">
-          <p class="text-xs md:text-base font-semibold">Управление:</p>
           <component
             :is="AsyncButton"
             variant="active"
@@ -49,7 +50,6 @@
             icon="plus"
             :loading="userStore.firstLoad"
           >
-            Создать
           </component>
           <component
             :is="AsyncButton"
@@ -58,7 +58,6 @@
             icon="trash"
             :loading="userStore.firstLoad"
           >
-            Удалить все
           </component>
         </div>
       </div>
@@ -73,7 +72,11 @@
           @sortChange="(sort) => handleFilters({ sort })"
         />
       </div>
-      <component :is="AsyncUserTable" :users="users" :delete-user="(id) => handleReduceAction('delete', id)" />
+      <component
+        :is="AsyncUserTable"
+        :users="users"
+        :delete-user="(id) => handleReduceAction('delete', id)"
+      />
     </div>
     <div class="w-full flex-center mb-5">
       <component
@@ -138,13 +141,27 @@ import { useRouter } from "vue-router";
 
 import { UserT } from "@/types/user";
 
-const AsyncButton = defineAsyncComponent(() => import("@/components/ui/Button.vue"));
-const AsyncQuestModal = defineAsyncComponent(() => import("@/components/ui/QuestModal.vue"));
-const AsyncPagePagination = defineAsyncComponent(() => import("@/components/PagePagination.vue"));
-const AsyncPaginationUsers = defineAsyncComponent(() => import("@/components/PaginationUsers.vue"));
-const AsyncUserTable = defineAsyncComponent(() => import("@/components/UserTable.vue"));
-const AsyncUserForm = defineAsyncComponent(() => import("@/components/ui/UserForm.vue"));
-const AsyncSearchFilters = defineAsyncComponent(() => import("@/components/ui/SearchFilters.vue"));
+const AsyncButton = defineAsyncComponent(
+  () => import("@/components/ui/Button.vue"),
+);
+const AsyncQuestModal = defineAsyncComponent(
+  () => import("@/components/ui/QuestModal.vue"),
+);
+const AsyncPagePagination = defineAsyncComponent(
+  () => import("@/components/PagePagination.vue"),
+);
+const AsyncPaginationUsers = defineAsyncComponent(
+  () => import("@/components/PaginationUsers.vue"),
+);
+const AsyncUserTable = defineAsyncComponent(
+  () => import("@/components/UserTable.vue"),
+);
+const AsyncUserForm = defineAsyncComponent(
+  () => import("@/components/ui/UserForm.vue"),
+);
+const AsyncSearchFilters = defineAsyncComponent(
+  () => import("@/components/ui/SearchFilters.vue"),
+);
 
 const userStore = useUserStore();
 const toastsStore = useToastsStore();
@@ -177,13 +194,18 @@ const handleFilters = async ({
   order?: "ASC" | "DESC";
   sort?: "createdAt" | "updatedAt";
 }) => {
-  if (search) userStore.search = search;
+  if (typeof search === 'string') userStore.search = search;
   if (sort) userStore.sort = sort;
   if (order) userStore.order = order;
   await userStore.fetchUsers();
 };
 
-const openModal = (title: string, text: string, action: (user: UserT | null) => void, isCreate = false) => {
+const openModal = (
+  title: string,
+  text: string,
+  action: (user: UserT | null) => void,
+  isCreate = false,
+) => {
   modalTitle.value = title;
   modalText.value = text;
   modalCreate.value = isCreate;
@@ -191,23 +213,28 @@ const openModal = (title: string, text: string, action: (user: UserT | null) => 
   showModalFlag.value = true;
 };
 
-const handleReduceAction = (type: "create" | "delete" | "deleteAll", id?: string) => {
+const handleReduceAction = (
+  type: "create" | "delete" | "deleteAll",
+  id?: string,
+) => {
   if (type === "create") {
     openModal(
       "Создание",
       "Заполните все данные о пользователе",
       (user: UserT | null) => user && void userStore.addUser(user),
-      true
+      true,
     );
   }
   if (type === "delete" && id) {
-    openModal("Удаление записи", "Вы уверены что хотите удалить запись?", () => userStore.deleteUser(id));
+    openModal("Удаление записи", "Вы уверены что хотите удалить запись?", () =>
+      userStore.deleteUser(id),
+    );
   }
   if (type === "deleteAll") {
     openModal(
       "Удаление всех записей",
       "Вы уверены что хотите удалить все записи? При следующем запросе будут загружены моковые данные",
-      userStore.deleteAllUsers
+      userStore.deleteAllUsers,
     );
   }
 };

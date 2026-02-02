@@ -1,6 +1,11 @@
 <template>
   <div class="search-input flex-between gap-2">
-    <Button :icon="order === 'DESC' ? 'arrow-up-z-a' : 'arrow-down-z-a'" @click="emitOrderChange" class="px-4 text-xl"> </Button>
+    <Button
+      :icon="order === 'DESC' ? 'arrow-up-z-a' : 'arrow-down-z-a'"
+      @click="emitOrderChange"
+      class="px-4 text-xl"
+    >
+    </Button>
     <select
       v-model="initialSort"
       @change="emitSortChange"
@@ -11,7 +16,6 @@
     </select>
     <input
       type="text"
-      v-model="searchQuery"
       @input="handleInput"
       placeholder="Введите текст для поиска"
       class="border px-4 py-2 rounded-lg shadow-md w-full text-[#000]"
@@ -45,16 +49,17 @@ const emitOrderChange = () => {
   emit("orderChange", order === "ASC" ? "DESC" : "ASC");
 };
 
-const searchQuery = ref("");
-
 let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
-const handleInput = () => {
+const handleInput = (e: InputEvent) => {
+  const target = e.target as HTMLInputElement;
+  const text = target.value;
+
   if (debounceTimeout) {
     clearTimeout(debounceTimeout);
   }
   debounceTimeout = setTimeout(() => {
-    emit("searchChange", searchQuery.value);
+    emit("searchChange", text);
   }, debounceTime ?? 500);
 };
 </script>

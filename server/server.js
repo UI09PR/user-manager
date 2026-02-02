@@ -3,7 +3,9 @@ import bodyParser from "body-parser";
 import { faker } from "@faker-js/faker";
 import cors from "cors";
 import fs from "fs/promises";
-import "dotenv/config";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,7 +13,7 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  })
+  }),
 );
 
 const DB_FILE = "./server/db.txt";
@@ -35,7 +37,6 @@ const readDatabase = async () => {
     const data = await fs.readFile(DB_FILE, "utf8");
     const fileData = JSON.parse(data);
     if (!fileData || fileData.length < 1) throw "";
-    console.log(fileData);
     return fileData;
   } catch {
     await saveDatabase(users);
@@ -61,7 +62,13 @@ const initializeDatabase = async () => {
 };
 
 app.get("/api/users", async (req, res) => {
-  const { limit = 10, page = 1, search = "", sort = "", order = "ASC" } = req.query;
+  const {
+    limit = 10,
+    page = 1,
+    search = "",
+    sort = "",
+    order = "ASC",
+  } = req.query;
 
   const limitInt = parseInt(limit, 10);
   const pageInt = parseInt(page, 10);
@@ -84,7 +91,9 @@ app.get("/api/users", async (req, res) => {
   try {
     const searchRegex = search ? new RegExp(search, "i") : null;
 
-    let filteredUsers = users.filter((user) => (searchRegex ? Object.values(user).join(" ").match(searchRegex) : true));
+    let filteredUsers = users.filter((user) =>
+      searchRegex ? Object.values(user).join(" ").match(searchRegex) : true,
+    );
 
     if (sort) {
       filteredUsers.sort((a, b) => {
@@ -129,7 +138,11 @@ app.patch("/api/users/:id", async (req, res) => {
   const userIndex = users.findIndex((u) => u.id === id);
 
   if (userIndex !== -1) {
-    users[userIndex] = { ...users[userIndex], ...req.body, updatedAt: new Date().toISOString() };
+    users[userIndex] = {
+      ...users[userIndex],
+      ...req.body,
+      updatedAt: new Date().toISOString(),
+    };
     await saveDatabase(users);
     res.json(users[userIndex]);
   } else {
@@ -153,6 +166,6 @@ const PORT = process.env.SERVER_PORT || 4020;
 
 initializeDatabase().then(() => {
   app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`🚀 Server running at http://127.0.0.1:${PORT}`);
   });
 });

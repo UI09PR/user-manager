@@ -1,7 +1,10 @@
 <template>
   <div class="w-full">
     <ul class="w-full flex-center flex-col gap-5">
-      <li v-if="users.length < 1" class="border-2 rounded-lg flex-between flex-col md:flex-row w-full p-4">
+      <li
+        v-if="users.length < 1"
+        class="border-2 rounded-lg flex-between flex-col md:flex-row w-full p-4"
+      >
         <h1>Тут будут пользователи</h1>
       </li>
       <li
@@ -12,12 +15,26 @@
         ref="userItems"
       >
         <div class="flex justify-start items-center gap-6">
-          <p v-if="keyboardStore.current === 'users' && keyboardStore.currentIndexY === i + 1" class="-ml-1 text-green-200">></p>
+          <p
+            v-if="
+              keyboardStore.current === 'users' &&
+              keyboardStore.currentIndexY === i + 1
+            "
+            class="-ml-1 text-green-200"
+          >
+            >
+          </p>
           <img :src="user.avatar" alt="avatar" class="rounded-[50%] w-14" />
           <div class="flex-start flex-col gap-1">
             <p>{{ user.name }}</p>
-            <p class="text-xs"><strong>Создан: </strong>{{ getFormattedDate(new Date(user.createdAt)) }}</p>
-            <p class="text-xs"><strong>Изменен: </strong>{{ getFormattedDate(new Date(user.updatedAt)) }}</p>
+            <p class="text-xs">
+              <strong>Создан: </strong
+              >{{ getFormattedDate(new Date(user.createdAt)) }}
+            </p>
+            <p class="text-xs">
+              <strong>Изменен: </strong
+              >{{ getFormattedDate(new Date(user.updatedAt)) }}
+            </p>
             <p class="text-xs"><strong>email: </strong>{{ user.email }}</p>
           </div>
         </div>
@@ -25,9 +42,9 @@
           <component
             :is="AsyncButton"
             @click="
-              (e) => {
+              (e: MouseEvent) => {
                 callTo(user, 'mail');
-                e.target.blur();
+                (e.target as HTMLElement).blur();
               }
             "
             type="button"
@@ -85,7 +102,8 @@
               @click=""
               type="button"
               :class="`text-[#0a0a08] text-xs sm:text-xs md:text-xs xl:text-xs ${
-                keyboardStore.currentIndexY === i + 1 && keyboardStore.currentIndexX === 4
+                keyboardStore.currentIndexY === i + 1 &&
+                keyboardStore.currentIndexX === 4
                   ? 'outline outline-2 outline-red-500'
                   : ''
               }`"
@@ -109,9 +127,14 @@ import { defineAsyncComponent, onMounted, ref } from "vue";
 import { useKeyboardStore } from "@/stores/keyboard";
 import { useRouter } from "vue-router";
 
-const AsyncButton = defineAsyncComponent(() => import("@/components/ui/Button.vue"));
+const AsyncButton = defineAsyncComponent(
+  () => import("@/components/ui/Button.vue"),
+);
 
-const { users, deleteUser } = defineProps<{ users: UserT[]; deleteUser: (id: string) => void }>();
+const { users, deleteUser } = defineProps<{
+  users: UserT[];
+  deleteUser: (id: string) => void;
+}>();
 const isSafari = ref(false);
 const router = useRouter();
 const keyboardStore = useKeyboardStore();

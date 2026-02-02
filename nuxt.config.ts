@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         "/api/": {
-          target: process.env.API_URL || "http://localhost:4020",
+          target: process.env.SERVER_API_URL || "http://127.0.0.1:4020",
           changeOrigin: true,
           secure: false,
         },

@@ -13,7 +13,7 @@
     <component :is="AsyncButton" variant="active" class="text-xl p-4" @click="() => userStore.fetchUsers()">Попробовать снова</component>
   </div>
   <div
-    class="flex-center w-full min-h-screen flex-start flex-col bg-gradient-to-b from-blue-500 to-blue-700 text-white"
+    class="flex-center w-full min-h-screen flex-start flex-col bg-gradient-to-b from-gray-900 to-black text-white"
   >
     <NuxtPage />
     <component :is="AsyncToast" />
@@ -35,8 +35,6 @@ const toastsStore = useToastsStore();
 const loading = computed(() => userStore.loading);
 const error = computed(() => userStore.error);
 onMounted(() => {
-  toastsStore.addToast("Добро пожаловать", "info", 3000);
-  toastsStore.addToast("Попробуйте стрелочную навигацию", "info", 3000);
   window.addEventListener("keydown", keyboardStore.handleKeyDown);
 });
 
